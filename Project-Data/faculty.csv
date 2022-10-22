@@ -1,0 +1,6 @@
+FacID,FacFN,FacLN,FacDept,FacRank,FacHireDate,FacSalary,FacSupervisor
+9001,Leonard,Vince,IS,ASST,12-Apr-07,,9003
+9002,Victor,Fibon,IS,ASSO,8-Aug-09,,9003
+9003,Nicki,Colan,IS,PROF,20-Aug-91,145000,9010
+9004,Fred,Wells,ACCT,ASST,28-Aug-06,106000,9010
+9010,Chris,Macon,ACCT,ASST,4-Aug-90,127900,
