@@ -1,12 +1,58 @@
 --IS443/543 Fall 2022
 --Weston Evans
 
---Drop previously created tables
-DROP TABLE STUDENT CASCADE CONSTRAINTS;
-DROP TABLE COURSE CASCADE CONSTRAINTS;
-DROP TABLE FACULTY CASCADE CONSTRAINTS;
-DROP TABLE OFFERING CASCADE CONSTRAINTS;
-DROP TABLE ENROLLMENT CASCADE CONSTRAINTS;
+--Create a procedure similar to DROP IF EXISTS
+
+CREATE OR REPLACE PROCEDURE DelObject(ObjName varchar2,ObjType varchar2)
+IS
+ v_counter number := 0;   
+begin    
+  if ObjType = 'TABLE' then
+    select count(*) into v_counter from user_tables where table_name = upper(ObjName);
+    if v_counter > 0 then          
+      execute immediate 'drop table ' || ObjName || ' cascade constraints';        
+    end if;   
+  end if;
+  if ObjType = 'PROCEDURE' then
+    select count(*) into v_counter from User_Objects where object_type = 'PROCEDURE' and OBJECT_NAME = upper(ObjName);
+      if v_counter > 0 then          
+        execute immediate 'DROP PROCEDURE ' || ObjName;        
+      end if; 
+  end if;
+  if ObjType = 'FUNCTION' then
+    select count(*) into v_counter from User_Objects where object_type = 'FUNCTION' and OBJECT_NAME = upper(ObjName);
+      if v_counter > 0 then          
+        execute immediate 'DROP FUNCTION ' || ObjName;        
+      end if; 
+  end if;
+  if ObjType = 'TRIGGER' then
+    select count(*) into v_counter from User_Triggers where TRIGGER_NAME = upper(ObjName);
+      if v_counter > 0 then          
+        execute immediate 'DROP TRIGGER ' || ObjName;
+      end if; 
+  end if;
+  if ObjType = 'VIEW' then
+    select count(*) into v_counter from User_Views where VIEW_NAME = upper(ObjName);
+      if v_counter > 0 then          
+        execute immediate 'DROP VIEW ' || ObjName;        
+      end if; 
+  end if;
+  if ObjType = 'SEQUENCE' then
+    select count(*) into v_counter from user_sequences where sequence_name = upper(ObjName);
+      if v_counter > 0 then          
+        execute immediate 'DROP SEQUENCE ' || ObjName;        
+      end if; 
+  end if;
+end;
+/
+
+-- DROP statements / Execute procedure DelObject for each obj in database
+EXECUTE DelObject ('STUDENT','TABLE'); 
+EXECUTE DelObject ('COURSE','TABLE'); 
+EXECUTE DelObject ('FACULTY','TABLE'); 
+EXECUTE DelObject ('OFFERING','TABLE'); 
+EXECUTE DelObject ('ENROLLMENT','TABLE'); 
+
 
 
 --Create Student table
